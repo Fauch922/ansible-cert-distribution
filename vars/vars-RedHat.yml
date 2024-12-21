@@ -1,0 +1,5 @@
+---
+# vars file for ca-certificates (Red Hat family specific)
+
+ca_packages:
+  - ca-certificates

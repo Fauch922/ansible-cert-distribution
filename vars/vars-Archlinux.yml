@@ -1,0 +1,5 @@
+---
+# vars file for ca-certificates (Archlinux specific)
+
+ca_packages:
+  - ca-certificates

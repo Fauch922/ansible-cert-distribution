@@ -1,0 +1,21 @@
+---
+# tasks file for ssmtp (Debian family specific)
+
+- name: install ca certificates
+  apt: name={{ ca_packages }} state=present update_cache=yes
+  tags: install-root-ca-certificates
+
+- name: Copy ca file to target host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /usr/local/share/ca-certificates
+    owner: root
+    group: root
+    mode: '0600'
+    remote_src: false
+  with_fileglob: "{{ source_glob }}"
+  tags: copy-ca-certificates
+
+- name: update certificate store
+  ansible.builtin.shell: update-ca-certificates
+  tags: register-ca-certificates

@@ -1,0 +1,5 @@
+---
+# vars file for ca-certificates (Alpine specific)
+
+ca_packages:
+  - ca-certificates

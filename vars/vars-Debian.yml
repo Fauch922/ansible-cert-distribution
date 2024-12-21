@@ -1,0 +1,5 @@
+---
+# vars file for ca-certificates (Debian family specific)
+
+ca_packages:
+  - ca-certificates

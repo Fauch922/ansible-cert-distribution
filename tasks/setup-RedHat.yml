@@ -1,0 +1,21 @@
+---
+# tasks file for ca-certificates (RedHat family specific)
+
+- name: install ca certificates
+  dnf: name={{ ca_packages }} state=present update_cache=yes
+  tags: install-root-ca-certificates
+
+- name: Copy ca file to target host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /etc/pki/ca-trust/source/anchors/
+    owner: root
+    group: root
+    mode: '0600'
+    remote_src: false
+  with_fileglob: "{{ source_glob }}"
+  tags: copy-ca-certificates
+
+- name: update certificate store
+  ansible.builtin.shell: update-ca-trust
+  tags: register-ca-certificates
