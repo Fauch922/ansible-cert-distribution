@@ -8,7 +8,7 @@ stages:
 cacertificates-rhel-tests:
   image: almalinux:latest
   stage: test-redhat
-  when: manual
+  #when: manual
   script:
     - dnf install -y epel-release
     - dnf install -y ansible
@@ -31,7 +31,7 @@ cacertificates-rhel-tests:
 cacertificates-archlinux-tests:
   image: archlinux:latest
   stage: test-arch
-  when: manual
+  #when: manual
   script:
     - pacman -Sy
     - pacman --noconfirm -Sy ansible python3 python-pip
@@ -54,7 +54,7 @@ cacertificates-archlinux-tests:
 cacertificates-alpine-tests:
   image: alpine:latest
   stage: test-alpine
-  when: manual
+  #when: manual
   script:
     - apk update && apk upgrade
     - apk add python3 py-pip ansible
@@ -77,7 +77,7 @@ cacertificates-alpine-tests:
 cacertificates-ubuntu2004-tests:
   image: ubuntu:20.04
   stage: test-ubuntu
-  when: manual
+  #when: manual
   variables:
     DEBIAN_FRONTEND: "noninteractive"
   script:
@@ -102,7 +102,7 @@ cacertificates-ubuntu2004-tests:
 cacertificates-ubuntu2204-tests:
   image: ubuntu:22.04
   stage: test-ubuntu
-  when: manual
+  #when: manual
   variables:
     DEBIAN_FRONTEND: "noninteractive"
   script:
@@ -149,5 +149,3 @@ cacertificates-ubuntu2404-tests:
 
     - ansible-playbook -vvvvv tests/test.yml
     - pytest --name debian
-
-
