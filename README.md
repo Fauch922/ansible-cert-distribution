@@ -40,7 +40,7 @@ are simply a number of globs where the role will search for your certificates.
   become: true
   remote_user: root
   roles:
-    - ca-certificates
+    - Fauch922.ansible-cert-distribution
   vars:
     source_glob:
       - /opt/admin/ca-certificates/*.crt
