@@ -75,12 +75,12 @@ cacertificates-alpine-tests:
 
 #ubuntu
 cacertificates-ubuntu2004-tests:
-  image: ubuntu:20.04
+  image: ubuntu:$VERSION
   stage: test-ubuntu
   #when: manual
   variables:
     DEBIAN_FRONTEND: "noninteractive"
-  script:
+  before_script:
     - DEBIAN_FRONTEND=noninteractive apt-get update --yes
     - DEBIAN_FRONTEND=noninteractive apt-get install --yes tzdata
     - apt-get install --yes software-properties-common
@@ -89,6 +89,7 @@ cacertificates-ubuntu2004-tests:
     - python3 -m venv venv || true
     - source venv/bin/activate
     - pip3 install -r requirements.txt
+  script:
     # copy role
     - cp -r $(pwd) /etc/ansible/roles/ca-certificates
 
@@ -98,54 +99,6 @@ cacertificates-ubuntu2004-tests:
 
     - ansible-playbook -vvvvv tests/test.yml
     - pytest --name debian
-
-cacertificates-ubuntu2204-tests:
-  image: ubuntu:22.04
-  stage: test-ubuntu
-  #when: manual
-  variables:
-    DEBIAN_FRONTEND: "noninteractive"
-  script:
-    - DEBIAN_FRONTEND=noninteractive apt-get update --yes
-    - DEBIAN_FRONTEND=noninteractive apt-get install --yes tzdata
-    - apt-get install --yes software-properties-common
-    - add-apt-repository --yes --update ppa:ansible/ansible
-    - apt-get install --yes python3 python3-pip python3-venv ansible
-    - python3 -m venv venv || true
-    - source venv/bin/activate
-    - pip3 install -r requirements.txt
-    # copy role
-    - cp -r $(pwd) /etc/ansible/roles/ca-certificates
-
-    # copy cert to source folder
-    - mkdir -p /opt/admin/ca-certificates/
-    - cp -r $(pwd)/files/* /opt/admin/ca-certificates/
-
-    - ansible-playbook -vvvvv tests/test.yml
-    - pytest --name debian
-
-cacertificates-ubuntu2404-tests:
-  image: ubuntu:24.04
-  stage: test-ubuntu
-  #when: manual
-  variables:
-    DEBIAN_FRONTEND: "noninteractive"
-  script:
-    - DEBIAN_FRONTEND=noninteractive apt-get update --yes
-    - DEBIAN_FRONTEND=noninteractive apt-get install --yes tzdata
-    - apt-get install --yes software-properties-common
-    - add-apt-repository --yes --update ppa:ansible/ansible
-    - apt-get install --yes python3 python3-pip python3-venv ansible
-    - rm -rf venv || true
-    - python3 -m venv venv || true
-    - source venv/bin/activate
-    - pip3 install -r requirements.txt
-    # copy role
-    - cp -r $(pwd) /etc/ansible/roles/ca-certificates
-
-    # copy cert to source folder
-    - mkdir -p /opt/admin/ca-certificates/
-    - cp -r $(pwd)/files/* /opt/admin/ca-certificates/
-
-    - ansible-playbook -vvvvv tests/test.yml
-    - pytest --name debian
+  parallel:
+    matrix:
+      - VERSION: ['20.04', '22.04', '24.04']
